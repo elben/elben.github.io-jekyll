@@ -1,0 +1,35 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  line-height: 1.8em;
+  font-family: 'Gentium Basic', Georgia, Times, serif;
+}
+
+#structure {
+  width: 600px;
+  margin: 100px auto;
+}
+
+.title {
+  font-size: 30px;
+}
+
+.content {
+  margin: auto;
+}
+
+.content p {
+  text-indent: 3em;
+  margin: 0;
+}
+
+.content p.final {
+  margin-top: 100px;
+  text-indent: 0;
+}
+
+.goudy {
+  font-family: 'Sorts Mill Goudy';
+  font-style: italic;
+}

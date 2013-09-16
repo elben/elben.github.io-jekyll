@@ -1,0 +1,68 @@
+<div class="writing">
+<h1>Why Free Food Tastes Better</h1>
+<h2>Elben Shira</h2>
+<h3>January 26, 2009</h3>
+
+<p>
+People often declare that free food tastes better. I did not believe them. 
+It was not until college that I realized the truth behind this theorem. But I 
+was confused. Why does free food tastes better?
+</p>
+
+<p>
+I understood that if a person spends a lot of energy, time, or money to a 
+cause (or product), that person would convince himself that that cause (or 
+product) was good, even though it might not be. This is known as cognitive 
+dissonance. From this, I theorized that because the cost of free food is zero, 
+at least in terms of money, there would be no reason for a person to convince 
+himself that the food is good. Hence, bad food would be seen as bad food, 
+mediocre food as mediocre, and good food as good. 
+</p>
+
+<p>
+But I find that I enjoy a free pizza from a pizza chain better than a 
+gourmet pizza from a classy pizzeria. [1] The gourmet pizza used better in- 
+gredients and was often-roasted, but it was $20. The free pizza was, well, 
+ordinary. The answer to this puzzling question is found in Expectation 
+Theory. [2]
+</p>
+
+<p>
+When you eat a free slice of pizza, you have no expectations. You did 
+not sacriﬁce much, so therefore you do not expect much in return. But of 
+course, pizza, being pizza, is extremely good. The return value you get for 
+what you paid is very high. Because of this unexpected high return value, 
+you enjoy that return much more. In the world of human-eat-human, you 
+stand victorious. You defeated the system. 
+</p>
+
+<p>
+This applies to other things. My professor in one of my computer science
+courses decided to write a book for the class and distribute it out for free. I
+bought a hard copy at-cost [3] for $12. It is the most exciting computer science
+book I have ever read. I do not wish to diminish the author’s accomplishment
+because it is a very well-written book. In fact, one of the conditions in
+enjoying free (or cheap) items is that the item has to be enjoyable in the
+first place. It’s not like I will enjoy a free but burnt slice of pizza or a
+cheap but useless textbook.  This theorem of mine is not scientific by any
+means, but when it comes to items such as foods, one is often called to simply
+stick to one’s guts. 
+</p>
+
+<span class="writing">
+<h2>Notes</h2>
+<p>
+[1] When I say enjoy, I mean not how tasty it is. Rather, I mean how much joy I
+get out of it.
+</p>
+
+<p>
+[2] I made this study up, though I’m sure there is something like this in
+economics.
+</p>
+
+<p>
+[3] That is, the cost for printing.
+</p>
+</span>
+</div>
