@@ -42,7 +42,7 @@ Currently hacking at <a href="http://massrelevance.com"
   {% for post in site.tags.favorite %}
     <li itemscope itemtype="http://schema.org/Article">
       <div class="article-item">
-        <a itemprop="url" href="{{ post.url }}">{{ post.title }}</a> &mdash; <span>{{ post.date | date_to_long_string }}</span>
+        <a itemprop="url" href="{{ post.url }}">{{ post.title }}</a>
         <div class="article-metadata">
           <span class="article-date">{{ post.date | date_to_long_string }}</span>
         </div>
