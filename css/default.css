@@ -186,3 +186,8 @@ ul {
   color: #999;
   font-size: 14px;
 }
+
+.post-content {
+  /* Hits about 80 characters per line with font size 16px */
+  width: 600px;
+}
