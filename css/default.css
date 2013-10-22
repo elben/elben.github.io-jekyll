@@ -30,7 +30,7 @@ a:hover {
 }
 
 hr {
-  border: 1px solid #eee;
+  border: 1px solid #ccc;
   width: 400px;
 
   /* The HR is 2px tall (1px top and bottom border). We have a 27px baseline, so
