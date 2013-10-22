@@ -230,7 +230,8 @@ ul {
 
 .article-metadata {
   color: #999;
-  font-size: 14px;
+  font-size: 0.75em;
+  line-height: 2em;
 }
 
 .post-content {
