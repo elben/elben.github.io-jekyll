@@ -2,7 +2,9 @@ body {
   color: #151111; /* Dark grey with a little of red saturation */
   background: #fff;
   font-family: "Helvetica Neue", "Lato", helvatica, sans-serif;
-  /* font-weight: 300; */
+
+  /* Our base font of 18px. Line-heights, margins, and paddings calculated to
+   * produce vertical rhyhtm. */
   font-size: 18px;
   line-height: 1.5em;
   padding: 0;
@@ -30,7 +32,10 @@ a:hover {
 hr {
   border: 1px solid #eee;
   width: 400px;
-  margin: 2em 0;
+
+  /* The HR is 2px tall (1px top and bottom border). We have a 27px baseline, so
+   * this means we have 25px left. Hence 25px margin. */
+  margin: 25px 0;
 }
 
 img {
@@ -46,23 +51,67 @@ img#background {
 code {
   font-family: "inconsolata-1", "inconsolata-2", monospace;
   font-weight: bold;
+  font-size: 1em;
+  line-height: 1em; /* For some reason, 1em for monospace fonts gives us vertical rhyhtm. */
 }
 
 pre {
+  font-size: 1em;
   font-family: "inconsolata-1", "inconsolata-2", monospace;
   border-left: 8px solid #eeeeee;
   padding: 0 1em;
-  margin: 2em 0;
+  margin: 1.5em 0; /* 1.5em margin to flow with default body line-height. */
+}
+
+/*
+ * Headers
+ * 
+ * For headers, we use http://modularscale.com to produce a scale in base size
+ * 18px using the "perfect-fourth" ratio.
+ *
+ * font     font
+ * px       em      line-height (1.5 / em)
+ * =======+========+==============
+ * 56.832 | 3.157  | .475134621
+ * 42.635 | 2.369  | .633178556
+ * 31.984 | 1.777  | .844119302
+ * 23.994 | 1.333  | 1.12528132
+ * 18     | 1      | 1.5
+ * 13.503 | 0.75   | 2
+ * 10.13  | 0.563  | 2.664298401
+ *
+ *
+ * The line-height measurements above are calculated via (1.5 em / font em).
+ * This represents the line-height (and margin/padding, if applicable) needed to
+ * make each element hit the right vertical line.
+ */
+
+h1 {
+  font-size: 2.369em;
+  line-height: 0.63317856em;
+  margin-bottom: 0.63317856em;
+  font-weight: bold;
 }
 
 h2 {
   font-size: 1.777em;
-  line-height: 0.8441193em;
+
+  /* This line-height calculated by pretending our base rhyhtm is at 13.5px
+   * instead of 27px (found by 18px * 1.5em).  This is done to produce some
+   * spacing between multi-lined headers.
+   *
+   * = (1.5em * 1.5) / 1.777em
+   */
+  line-height: 1.266178953em;
+
   margin: 0 0 0.8441193em 0;
   font-weight: bold;
 }
 
 h3 {
+  font-size: 1.333em;
+  line-height: 1.12528132em;
+  margin: 0 0 1.12528132em 0;
   font-weight: bold;
 }
 
@@ -84,10 +133,6 @@ ul {
 }
 
 #header h1 {
-  font-size: 2.369em;
-  line-height: 0.63317856em;
-  margin-bottom: 0.63317856em;
-  font-weight: bold;
   color: #FF5A33;
   margin-top: 0;
   padding-top: 40px;
@@ -96,6 +141,7 @@ ul {
 #header h1.small {
   font-size: 1em;
   line-height: 1.5em;
+  margin-bottom: 1.5em;
 }
 
 #header a {
