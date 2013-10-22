@@ -1,7 +1,7 @@
 body {
   color: #151111; /* Dark grey with a little of red saturation */
   background: #fff;
-  font-family: "Helvetica Neue", "Lato", helvatica, sans-serif;
+  font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
 
   /* Our base font of 18px. Line-heights, margins, and paddings calculated to
    * produce vertical rhyhtm. */
