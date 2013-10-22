@@ -225,11 +225,13 @@ ul {
 }
 
 .meta {
-  color: #aaa;
+  /* Grey with reddish saturation */
+  color: #b3a9a6;
 }
 
 .article-metadata {
-  color: #999;
+  /* Grey with reddish saturation */
+  color: #b3a9a6;
   font-size: 0.75em;
   line-height: 2em;
 }
