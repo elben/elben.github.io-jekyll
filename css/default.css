@@ -117,11 +117,10 @@ h3 {
 
 ul {
   list-style: none;
-  margin-left: 0;
+  margin-left: -1em;
   margin-top: 0;
   margin-bottom: 1.5em;
   padding-left: 1em;
-  text-indent: -1em;
 }
 
 #structure {
@@ -238,4 +237,14 @@ ul {
 .post-content {
   /* Hits about 80 characters per line with font size 16px */
   width: 600px;
+}
+
+@media (max-width: 700px) {
+  #structure {
+    position: relative;
+    height: auto;
+    margin: auto;
+    width: auto;
+    padding: 0 1em;
+  }
 }
