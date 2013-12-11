@@ -248,3 +248,9 @@ ul {
     padding: 0 1em;
   }
 }
+
+@media (max-width: 600px) {
+  .post-content {
+    width: auto;
+  }
+}
