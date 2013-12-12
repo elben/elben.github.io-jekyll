@@ -126,8 +126,8 @@ ul {
 #structure {
   position: relative;
   height: auto;
-  margin: 0 40px;
-  width: 700px;
+  margin-left: 2em;
+  max-width: 700px;
 }
 
 #header h1 {
