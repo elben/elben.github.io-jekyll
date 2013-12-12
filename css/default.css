@@ -236,21 +236,11 @@ ul {
 
 .post-content {
   /* Hits about 80 characters per line with font size 16px */
-  width: 600px;
+  max-width: 600px;
 }
 
 @media (max-width: 700px) {
   #structure {
-    position: relative;
-    height: auto;
-    margin: auto;
-    width: auto;
-    padding: 0 1em;
-  }
-}
-
-@media (max-width: 600px) {
-  .post-content {
-    width: auto;
+    margin: 0 1em;
   }
 }
