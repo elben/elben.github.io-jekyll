@@ -48,16 +48,19 @@ img#background {
   right: 0;
 }
 
+/* code is used in body (not just code blocks), so we need to be sure to handle
+ * vertical rhyhtm. Simpliest to keep font-size 1em. */
 code {
-  font-family: "inconsolata-1", "inconsolata-2", monospace;
-  font-weight: bold;
+  font-family: Consolas, "inconsolata-1", "inconsolata-2", monospace;
+  font-weight: normal;
   font-size: 1em;
   line-height: 1em; /* For some reason, 1em for monospace fonts gives us vertical rhyhtm. */
 }
 
 pre {
-  font-size: 1em;
-  font-family: "inconsolata-1", "inconsolata-2", monospace;
+  font-size: 15px;
+  line-height: 1.5em;
+  font-family: Consolas, "inconsolata-1", "inconsolata-2", monospace;
   border-left: 8px solid #ece5dc;
   padding: 0 1em;
   margin: 1.5em 0; /* 1.5em margin to flow with default body line-height. */
