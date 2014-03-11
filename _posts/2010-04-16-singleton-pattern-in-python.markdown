@@ -62,7 +62,7 @@ In the snippet above, `singleton()` is a function that takes a class and returns
 function. I created a simple `Counter` class. Line 15 shows that `Counter` is a
 class. I then set `Counter` to the return value of `singleton(Counter)`. `Counter` is
 now a function, as line 17 shows. This is awesome. Now, whenever the user tries
-to "instantiate" a `Counter`, the user is really just calling a function, namely
+to “instantiate” a `Counter`, the user is really just calling a function, namely
 `getinstance()`. And `getinstance()` is built so that it will only build one
 instance of `Counter,` on line 5. If an instance of `Counter` already exists,
 `getinstance()` will simply return that instance.
@@ -70,7 +70,7 @@ instance of `Counter,` on line 5. If an instance of `Counter` already exists,
 ## The Power of Closures
 
 But why does `getinstance()` work? The most amazing part is that the `getinstance()`
-that is set to `Counter` is a specific `getinstance()` that "closes over" the
+that is set to `Counter` is a specific `getinstance()` that “closes over” the
 variables `cls` and `instances`. That is, when we define `getinstance()` inside of
 singleton(), `getinstance()` still has access to `cls` and `instances,` even after we
 exit singleton(). Thus, we don't have to create a new `instances` dictionary every
