@@ -2,7 +2,7 @@
   font-weight: normal;
 }
 
-.highlight  { background: #ffffff; }
+.highlight  { background: #f9f5f1; }
 .highlight .c { color: #999988; font-style: italic } /* Comment */
 .highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .highlight .k { font-weight: bold } /* Keyword */
@@ -67,6 +67,6 @@
 .highlight .lineno {
   color: #999;
   margin-left: -8px;
-  border-right: 2px solid #eeeeee;
+  border-right: 2px solid #ece5dc;
   padding: 4px 12px 5px inherit;
 }

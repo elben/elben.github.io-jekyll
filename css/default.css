@@ -1,6 +1,6 @@
 body {
-  color: #151111; /* Dark grey with a little of red saturation */
-  background: #fff;
+  color: #151311; /* Dark grey with a little of red saturation */
+  background: #f9f5f1;
   font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
 
   /* Our base font of 18px. Line-heights, margins, and paddings calculated to
@@ -58,7 +58,7 @@ code {
 pre {
   font-size: 1em;
   font-family: "inconsolata-1", "inconsolata-2", monospace;
-  border-left: 8px solid #eeeeee;
+  border-left: 8px solid #ece5dc;
   padding: 0 1em;
   margin: 1.5em 0; /* 1.5em margin to flow with default body line-height. */
 }
