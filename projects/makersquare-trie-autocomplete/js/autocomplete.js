@@ -27,7 +27,7 @@ $(function () {
     var val = $(this).val();
 
     if (val && val.length > 0) {
-      var results = trie.search($(this).val());
+      var results = trie.sr($(this).val());
       for (var i in results) {
         var result = results[i];
         $(".words").append("<li>" + result + "</li>");
@@ -39,7 +39,7 @@ $(function () {
     var val = $(this).val();
 
     if (val && val.length > 0) {
-      if(trie.includes($(this).val())) {
+      if(trie.i($(this).val())) {
         $("#contains-result").html("true");
       } else {
         $("#contains-result").html("false");
