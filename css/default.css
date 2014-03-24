@@ -55,6 +55,14 @@ code {
   font-weight: normal;
   font-size: 1em;
   line-height: 1em; /* For some reason, 1em for monospace fonts gives us vertical rhyhtm. */
+
+  padding: 3px 3px 1px;
+  background: #e8dfd6;
+}
+
+.highlight code {
+  padding: 0;
+  background: none;
 }
 
 pre {
