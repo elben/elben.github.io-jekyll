@@ -1,5 +1,5 @@
 name: Elben Shira
 markdown: redcarpet
-pygments: true
+highlighter: true
 port: 4001
 permalink: /:categories/:title/
