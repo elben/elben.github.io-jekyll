@@ -55,6 +55,7 @@ code {
   font-family: Consolas, "inconsolata-1", "inconsolata-2", monospace;
   font-weight: normal;
   line-height: 1em; /* For some reason, 1em for monospace fonts gives us vertical rhyhtm. */
+  font-weight: 400;
 
   padding: 3px 3px 1px;
   background: #e8dfd6;
