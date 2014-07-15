@@ -9,11 +9,11 @@ goog.addDependency("../cljs/core/async/impl/dispatch.js", ['cljs.core.async.impl
 goog.addDependency("../om/dom.js", ['om.dom'], ['cljs.core']);
 goog.addDependency("../om/core.js", ['om.core'], ['cljs.core', 'om.dom', 'goog.ui.IdGenerator']);
 goog.addDependency("../planjure/appstate.js", ['planjure.appstate'], ['cljs.core', 'planjure.plan']);
+goog.addDependency("../planjure/history.js", ['planjure.history'], ['cljs.core', 'om.core', 'planjure.appstate']);
 goog.addDependency("../cljs/core/async/impl/ioc_helpers.js", ['cljs.core.async.impl.ioc_helpers'], ['cljs.core', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async/impl/channels.js", ['cljs.core.async.impl.channels'], ['cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.timers'], ['cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.async.impl.ioc_helpers', 'cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols', 'cljs.core.async.impl.timers']);
-goog.addDependency("../planjure/components/editor.js", ['planjure.components.editor'], ['cljs.core', 'om.core', 'om.dom', 'cljs.core.async']);
-goog.addDependency("../planjure/components/toolbar.js", ['planjure.components.toolbar'], ['cljs.core', 'planjure.components.editor', 'om.core', 'om.dom', 'cljs.core.async', 'planjure.plan']);
-goog.addDependency("../planjure/components/canvas.js", ['planjure.components.canvas'], ['cljs.core', 'om.core', 'planjure.appstate', 'om.dom', 'cljs.core.async', 'goog.events', 'planjure.plan']);
+goog.addDependency("../planjure/components/toolbar.js", ['planjure.components.toolbar'], ['cljs.core', 'om.core', 'planjure.history', 'om.dom', 'cljs.core.async', 'planjure.plan']);
+goog.addDependency("../planjure/components/canvas.js", ['planjure.components.canvas'], ['cljs.core', 'om.core', 'planjure.history', 'planjure.appstate', 'om.dom', 'cljs.core.async', 'goog.events', 'planjure.plan']);
 goog.addDependency("../planjure/core.js", ['planjure.core'], ['cljs.core', 'om.core', 'planjure.appstate', 'planjure.components.toolbar', 'om.dom', 'cljs.core.async', 'planjure.components.canvas', 'planjure.plan']);

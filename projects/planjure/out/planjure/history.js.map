@@ -1,0 +1,15 @@
+{"version":3,
+ "file":"/Users/elben/code/planjure/out/planjure/history.js",
+ "sources":["history.cljs"],
+ "lineCount":27,
+ "mappings":
+ ";AAAA;;;;;;AAOA,AAAKA,iCAAc,yBAAA,zBAACC;AACpB,AAAKC,gCAAa,yBAAA,zBAACD;AAEnB,8BAAA,4BAAA,1DAAME,mDAAYC,OAChB,AAACC,+BAAML,+BAAcM,eAAKF;AAE1B,qEAAA,9DAACG,gCAAOL;;AAEV,8BAAA,0CAAA,AAAA,xEAAMM,mDAAYC,WAAWC,UAG3B,GAAI,oEAAA,nEAAG,0BAAA,AAAAC,1BAACC,oDAAOH;CACb,kPAAA,9OAAMI,gBAAc,AAAA,qFAAA,AAAAF,0BAASG,kCACvBC,aAAW,yBAAA,AAAAJ,zBAACK,mDAAMP,aACtB,AAACJ,+BAAMI,WAAWQ;AAClB,AAACZ,+BAAMK,SAASJ,eAAKO;AACrB,AAACN,gCAAOO,4BAAmB,6BAAA,AAAAH,uDAAA,mFAAA,vKAACO,uDAAUJ,+KAA4BC;AAClEA;;CANJ;;;AAQF,wBAAA,iBAAA,zCAAMI,yCACJ,OAACX,sCAAWR,+BAAcE;;AAE5B,wBAAA,iBAAA,zCAAMkB,yCACJ,OAACZ,sCAAWN,8BAAaF",
+ "names":
+ ["planjure.history/world-history", "cljs.core/atom",
+  "planjure.history/world-future", "planjure.history/push-world",
+  "world", "cljs.core/swap!", "cljs.core/conj", "cljs.core/reset!",
+  "planjure.history/move-stack", "from-stack", "to-stack",
+  "cljs.core/deref", "cljs.core/count", "current-world",
+  "planjure.appstate/app-state", "prev-world", "cljs.core/last",
+  "cljs.core/pop", "cljs.core/assoc-in", "planjure.history/undo",
+  "planjure.history/redo"]}
