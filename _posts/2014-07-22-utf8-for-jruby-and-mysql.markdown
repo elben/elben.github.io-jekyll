@@ -4,7 +4,7 @@ title:  "UTF-8 for JRuby and MySQL"
 categories: blog
 ---
 
-As we all know, string encoding is very fun and pleasant.
+As we all know, string encoding is fun and pleasant.
 
 If your MySQL database uses the UTF-8 charset, you'll probably want JRuby to use
 UTF-8. To start JRuby (or anything else on the JVM) with UTF-8 as the default
