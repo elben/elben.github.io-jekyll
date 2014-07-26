@@ -14,8 +14,8 @@ goog.addDependency("events/eventtype.js", ['goog.events.EventType'], ['goog.user
 goog.addDependency("reflect/reflect.js", ['goog.reflect'], []);
 goog.addDependency("events/browserevent.js", ['goog.events.BrowserEvent', 'goog.events.BrowserEvent.MouseButton'], ['goog.events.BrowserFeature', 'goog.events.Event', 'goog.events.EventType', 'goog.reflect', 'goog.userAgent']);
 goog.addDependency("debug/entrypointregistry.js", ['goog.debug.EntryPointMonitor', 'goog.debug.entryPointRegistry'], ['goog.asserts']);
-goog.addDependency("ui/idgenerator.js", ['goog.ui.IdGenerator'], []);
 goog.addDependency("debug/errorhandlerweakdep.js", ['goog.debug.errorHandlerWeakDep'], []);
 goog.addDependency("events/listenable.js", ['goog.events.Listenable', 'goog.events.ListenableKey'], ['goog.events.EventLike']);
 goog.addDependency("events/listener.js", ['goog.events.Listener'], ['goog.events.ListenableKey']);
 goog.addDependency("events/events.js", ['goog.events', 'goog.events.Key'], ['goog.array', 'goog.debug.entryPointRegistry', 'goog.debug.errorHandlerWeakDep', 'goog.events.BrowserEvent', 'goog.events.BrowserFeature', 'goog.events.Event', 'goog.events.EventWrapper', 'goog.events.Listenable', 'goog.events.Listener', 'goog.object', 'goog.userAgent']);
+goog.addDependency("ui/idgenerator.js", ['goog.ui.IdGenerator'], []);

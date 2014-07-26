@@ -23,5 +23,12 @@ planjure.history.undo = (function undo(){return planjure.history.move_stack.call
 });
 planjure.history.redo = (function redo(){return planjure.history.move_stack.call(null,planjure.history.world_future,planjure.history.world_history);
 });
+planjure.history.reset = (function reset(){cljs.core.reset_BANG_.call(null,planjure.history.world_history,cljs.core.PersistentVector.EMPTY);
+return cljs.core.reset_BANG_.call(null,planjure.history.world_future,cljs.core.PersistentVector.EMPTY);
+});
+planjure.history.undoable = (function undoable(){return (cljs.core.count.call(null,cljs.core.deref.call(null,planjure.history.world_history)) > 0);
+});
+planjure.history.redoable = (function redoable(){return (cljs.core.count.call(null,cljs.core.deref.call(null,planjure.history.world_future)) > 0);
+});
 
 //# sourceMappingURL=history.js.map

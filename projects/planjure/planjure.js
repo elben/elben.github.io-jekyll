@@ -14,6 +14,9 @@ goog.addDependency("../cljs/core/async/impl/ioc_helpers.js", ['cljs.core.async.i
 goog.addDependency("../cljs/core/async/impl/channels.js", ['cljs.core.async.impl.channels'], ['cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async/impl/timers.js", ['cljs.core.async.impl.timers'], ['cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols']);
 goog.addDependency("../cljs/core/async.js", ['cljs.core.async'], ['cljs.core.async.impl.ioc_helpers', 'cljs.core.async.impl.buffers', 'cljs.core', 'cljs.core.async.impl.channels', 'cljs.core.async.impl.dispatch', 'cljs.core.async.impl.protocols', 'cljs.core.async.impl.timers']);
-goog.addDependency("../planjure/components/toolbar.js", ['planjure.components.toolbar'], ['cljs.core', 'om.core', 'planjure.history', 'om.dom', 'cljs.core.async', 'planjure.plan']);
 goog.addDependency("../planjure/components/canvas.js", ['planjure.components.canvas'], ['cljs.core', 'om.core', 'planjure.history', 'planjure.appstate', 'om.dom', 'cljs.core.async', 'goog.events', 'planjure.plan']);
-goog.addDependency("../planjure/core.js", ['planjure.core'], ['cljs.core', 'om.core', 'planjure.appstate', 'planjure.components.toolbar', 'om.dom', 'cljs.core.async', 'planjure.components.canvas', 'planjure.plan']);
+goog.addDependency("../planjure/components/toolbar.js", ['planjure.components.toolbar'], ['cljs.core', 'om.core', 'planjure.history', 'om.dom', 'cljs.core.async', 'planjure.plan']);
+goog.addDependency("../planjure/demo.js", ['planjure.demo'], ['cljs.core', 'om.core', 'planjure.appstate', 'planjure.components.toolbar', 'om.dom', 'cljs.core.async', 'planjure.components.canvas', 'planjure.plan']);
+goog.addDependency("../clojure/string.js", ['clojure.string'], ['cljs.core', 'goog.string', 'goog.string.StringBuffer']);
+goog.addDependency("../cemerick/cljs/test.js", ['cemerick.cljs.test'], ['cljs.core', 'clojure.string']);
+goog.addDependency("../planjure/test/core.js", ['planjure.test.core'], ['cljs.core', 'cemerick.cljs.test']);
