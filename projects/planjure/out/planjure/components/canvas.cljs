@@ -5,8 +5,12 @@
             [goog.events :as events]
             [cljs.core.async :refer [put! chan <!]]
             [planjure.plan :as plan]
+            [planjure.utils :as utils]
             [planjure.appstate :as appstate]
             [planjure.history :as history]))
+
+(def update-world-time (atom 0))
+(def canvas-redraw-time (atom 0))
 
 (def mouse-chan (chan))
 
@@ -21,6 +25,7 @@
 
 (def color-mapping
   ["#09738A", "#adc5ad" "#c6c294" "#7c9a53" "#578633" "#3b621a" "#2d5010" "#26470b"])
+   ; "#756e68" "#9b9186" "#c0b1a3" "#dacec2" "#f2efeb"])
 
 (defn weight-to-hex-color [weight] (color-mapping (dec weight)))
 
@@ -30,65 +35,66 @@
     value))
 
 (defn draw-rect-tile 
-  ([context row col color] (draw-rect-tile context row col color (get-selected-tile-size)))
-  ([context row col color size]
-   (let [y (* row (get-selected-tile-size))
-         x (* col (get-selected-tile-size))]
-     (set! (.-fillStyle context) color)
-     (.fillRect context x y size size))))
+  [context row col color size]
+  (let [y (* row size)
+        x (* col size)]
+    (set! (.-fillStyle context) color)
+    (.fillRect context x y size size)
+    ))
 
 (defn draw-circle
-  ([context row col color] (draw-circle context row col color (get-selected-tile-size)))
-  ([context row col color size]
-   (let [radius (/ size 2)
-         y (+ (* row size) radius)
-         x (+ (* col size) radius)]
-     (set! (.-fillStyle context) color)
-     (.beginPath context)
-     (.arc context x y radius 0 (* 2 Math/PI) false)
-     (.closePath context)
-     (set! (.-strokeStyle context) color)
-     (.stroke context))))
+  [context row col color size]
+  (let [radius (/ size 2)
+        y (+ (* row size) radius)
+        x (+ (* col size) radius)]
+    (set! (.-fillStyle context) color)
+    (.beginPath context)
+    (.arc context x y radius 0 (* 2 Math/PI) false)
+    (.closePath context)
+    (set! (.-strokeStyle context) color)
+    (.stroke context)))
 
-(defn draw-start-finish-marker [context row col]
+(defn draw-start-finish-marker [context row col size]
   (let [color "#ff0000"]
-    (draw-rect-tile context row col color)))
+    (draw-rect-tile context row col color size)))
 
 (defn draw-path-market [context row col])
 
-(defn draw-path [context path]
+(defn draw-path [context path size]
   (doseq [node path]
-    (draw-circle context (nth node 0) (nth node 1) "#00ff00")))
+    (draw-circle context (nth node 0) (nth node 1) "#00ff00" size)))
 
 ;; context - Canvas context
 ;; row -
 ;; col
 ;; weight - 0 to 9
-(defn draw-tile [context row col weight]
+(defn draw-tile [context row col weight size]
   (let [color (weight-to-hex-color weight)]
-    (draw-rect-tile context row col color)))
+    (draw-rect-tile context row col color size)))
 
 (defn refresh-world [app-state owner dom-node-ref]
   (let [canvas (om/get-node owner dom-node-ref)
         context (.getContext canvas "2d")
         world (:world app-state)
-        setup (:setup app-state)]
+        setup (:setup app-state)
+        size (get-selected-tile-size)]
     ; clear canvas
     (set! (.-width canvas) (.-width canvas))
 
     ; draw world
-    (dotimes [row (count world)]
-      (dotimes [col (count (nth world row))]
-        (draw-tile context row col (nth (nth world row) col))))
+    (dotimes [r (count world)]
+      (let [row (nth world r)]
+        (dotimes [c (count row)]
+          (draw-tile context r c (nth row c) size))))
 
-    ;draw start/finish
+    ; draw start/finish
     (let [[start-row start-col] (get-in app-state [:setup :start])
           [finish-row finish-col] (get-in app-state [:setup :finish])]
-      (draw-start-finish-marker context start-row start-col)
-      (draw-start-finish-marker context finish-row finish-col))
+      (draw-start-finish-marker context start-row start-col size)
+      (draw-start-finish-marker context finish-row finish-col size))
 
     ; draw path (if exists)
-    (draw-path context (:path app-state))))
+    (draw-path context (:path app-state) size)))
 
 (defn mouse-pos-at
   [canvas e]
@@ -103,15 +109,17 @@
     {:x (max 0 (int (/ x tile-size))) :y (max 0 (int (/ y tile-size)))}))
 
 (defn update-world!
-  [app-state x y incr]
   "Increase cost at x, y position in the world passed in via the app-state
   cursor."
-  (let [world (:world @appstate/app-state)
-        row (world y)
-        cost (row x)
-        new-cost (max 1 (min (+ incr cost) 8))
-        new-row (assoc row x new-cost)
-        new-world (assoc world y new-row)]
+  [app-state x y multiplier]
+  (let [brush-size (:brush-size @appstate/app-state)
+        matrix (get-in @appstate/app-state [:brush-size-options brush-size :matrix])
+        new-world (utils/update-world (:world @appstate/app-state)
+                                      matrix
+                                      x y multiplier)]
+    ;; TODO updating app-state right here takes a LONG time because it renders
+    ;; all components w/ a cursor to :world. We need to use cursors for other
+    ;; non-canvas components, instead of just passing in the whole state.
     (om/update! app-state :world new-world)))
 
 (defn erase-at
@@ -147,22 +155,26 @@
           (while true
             (let [mouseevent (<! mouse-chan)]
               (case (:mouseevent mouseevent)
-                :mousedown (let [world (:world @appstate/app-state)]
-                             ;; Consider a mouseup an atomic commit of the user
-                             ;; brush stroke.
-                             (om/update! app-state :mouse-drawing true)
-                             (history/push-world world)
-                             )
-                :mouseup (let [world (:world @appstate/app-state)]
-                           ;; Consider a mouseup an atomic commit of the user
-                           ;; brush stroke.
-                           ; (history/push-world world)
-                           (om/update! app-state :mouse-drawing false))
-                :mousemove (when (:mouse-drawing @app-state)
-                             (let [tile-pos (tile-pos-at canvas (:event mouseevent))]
-                               (case (:brush @app-state)
-                                 :eraser (erase-at app-state tile-pos)
-                                 :brush (paint-at app-state tile-pos))))))))))
+                ;; On mousedown, user starts drawing phase.
+                :mousedown
+                (let [world (:world @appstate/app-state)]
+                  (om/update! app-state :mouse-drawing true)
+                  ;; Commit the previous world into history
+                  (history/push-world world))
+
+                ;; Consider a mouseup an atomic commit of the user
+                ;; brush stroke.
+                :mouseup
+                (let [world (:world @appstate/app-state)]
+                  (om/update! app-state :mouse-drawing false))
+
+                ;; Actually draw when user moves mouse.
+                :mousemove
+                (when (:mouse-drawing @app-state)
+                  (let [tile-pos (tile-pos-at canvas (:event mouseevent))]
+                    (case (:brush @app-state)
+                      :eraser (erase-at app-state tile-pos)
+                      :brush (paint-at app-state tile-pos))))))))))
 
     ; Invoked directly after rendering. What triggers a render? An update in
     ; the component's data. And since what we passed to this component was the

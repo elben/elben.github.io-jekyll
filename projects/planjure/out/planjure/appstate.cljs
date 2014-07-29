@@ -14,7 +14,7 @@
            {
             :small  { :text "Small"  :size 20  :tile-size-px 20 }
             :medium { :text "Medium" :size 40  :tile-size-px 10 }
-            :large  { :text "Large"  :size 200 :tile-size-px 2 }
+            :large  { :text "Large"  :size 100 :tile-size-px 4 }
            }
 
          :brush :brush
@@ -27,9 +27,15 @@
          :brush-size :size1
          :brush-size-options
            {
-            :size1 { :text "1" }
-            :size2 { :text "2" }
-            :size3 { :text "3" }
+            :size1 { :text "1" :matrix [[1]] }
+            :size2 { :text "2" :matrix [[0 1 0]
+                                        [1 1 1]
+                                        [0 1 0]] }
+            :size3 { :text "3" :matrix [[0 1 1 1 0]
+                                        [1 1 2 1 1]
+                                        [1 2 2 2 1]
+                                        [1 1 2 1 1]
+                                        [0 1 1 1 0]] }
            }
 
          :mouse-drawing false
