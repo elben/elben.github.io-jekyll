@@ -30,12 +30,12 @@ a:hover {
 }
 
 hr {
-  border: 1px solid #ccc;
-  width: 400px;
+  width: 600px;
 
-  /* The HR is 2px tall (1px top and bottom border). We have a 27px baseline, so
-   * this means we have 25px left. Hence 25px margin. */
-  margin: 25px 0;
+  /* The HR is 4px tall (1px top and 3px bottom border). We have a 27px
+   * baseline, so this means we have 23px left. Hence 23px margin. */
+  border: 3px solid #ece5dc;
+  margin: 23px 0;
 }
 
 img {
@@ -57,8 +57,8 @@ code {
   line-height: 1em; /* For some reason, 1em for monospace fonts gives us vertical rhyhtm. */
   font-weight: 400;
 
-  padding: 3px 3px 1px;
-  background: #e8dfd6;
+  /* padding: 3px 3px 1px; */
+  /* background: #e8dfd6; */
 }
 
 .highlight code {
@@ -139,6 +139,7 @@ ul {
   height: auto;
   margin-left: auto;
   margin-right: auto;
+  padding: 0 1em;
   max-width: 700px;
 }
 
@@ -251,8 +252,35 @@ ul {
   max-width: 600px;
 }
 
-@media (max-width: 700px) {
-  #structure {
-    margin: 0 1em;
+.post-content-end {
+  margin-top: 3em;
+}
+
+.highlight .lineno {
+  color: #999;
+  margin-left: -8px;
+  border-right: 2px solid #ece5dc;
+  /* 6px - Makes border-right align as they ought */
+  padding: 6px 12px 5px inherit;
+}
+
+@media (max-width: 640px) {
+  pre {
+    border-left: none;
+    padding: 0;
+    margin: 1.5em 0; /* 1.5em margin to flow with default body line-height. */
+  }
+
+  .highlight .lineno {
+    color: #999;
+    margin-left: 0;
+    border-right: 2px solid #ece5dc;
+    /* 6px - Makes border-right align as they ought */
+    padding: 6px 6px 5px inherit;
+  }
+
+  hr {
+    /* A bit less than max-width of a post */
+    width: auto;
   }
 }
