@@ -1,7 +1,47 @@
+@font-face {
+    font-family: 'charterbold_italic';
+    src: url('charter_bold_italic-webfont.eot');
+    src: url('charter_bold_italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('charter_bold_italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'charterbold';
+    src: url('font/charter_bold-webfont.eot');
+    src: url('font/charter_bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/charter_bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'charteritalic';
+    src: url('font/charter_italic-webfont.eot');
+    src: url('font/charter_italic-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/charter_italic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'charterregular';
+    src: url('font/charter_regular-webfont.eot');
+    src: url('font/charter_regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('font/charter_regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body {
   color: #151311; /* Dark grey with a little of red saturation */
   background: #f9f5f1;
-  font-family: Georgia, sans-serif;
+  font-family: 'Charter', Georgia, sans-serif;
 
   /* Our base font of 18px. Line-heights, margins, and paddings calculated to
    * produce vertical rhyhtm. */
@@ -51,7 +91,7 @@ img#background {
 /* code is used in body (not just code blocks), so we need to be sure to handle
  * vertical rhyhtm. Simpliest to keep font-size 1em. */
 code {
-  font-size: 16px;
+  font-size: 0.9em;
   font-family: Consolas, "inconsolata-1", "inconsolata-2", monospace;
   font-weight: normal;
   line-height: 1em; /* For some reason, 1em for monospace fonts gives us vertical rhyhtm. */
@@ -116,14 +156,24 @@ h1 {
 h2 {
   font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
   font-size: 1.333em;
-  line-height: 1.12528132em;
-  margin: 0 0 1.12528132em 0;
   font-weight: bold;
+
+  /* For a font size 1.333em, per our chart above, we have a line height of
+   * 1.12528132em. For "perfect" alignment, our margin-bottom should also be
+   * that number, but I'm going to go with what looks good by gut. The header
+   * should be a bit closer to the section it declares, for contextual
+   * proximity.
+   */
+  line-height: 1.12528132em;
+  margin: 0 0 .28132033em 0;
+  /* margin: 0 0 1.12528132em 0; */
 }
 
 h3 {
   font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
   font-weight: bold;
+  font-size: 1em;
+  margin: 1em 0 0em;
 }
 
 ul {
@@ -268,7 +318,7 @@ ul {
 
 @media (max-width: 640px) {
   body {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   #header h1 {
