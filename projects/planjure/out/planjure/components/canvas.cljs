@@ -4,8 +4,8 @@
             [om.dom :as dom :include-macros true]
             [goog.events :as events]
             [cljs.core.async :refer [put! chan <!]]
-            [planjure.plan :as plan]
             [planjure.utils :as utils]
+            [planjure.components.toolbar :as toolbar]
             [planjure.appstate :as appstate]
             [planjure.history :as history]))
 
@@ -39,8 +39,7 @@
   (let [y (* row size)
         x (* col size)]
     (set! (.-fillStyle context) color)
-    (.fillRect context x y size size)
-    ))
+    (.fillRect context x y size size)))
 
 (defn draw-circle
   [context row col color size]
@@ -55,14 +54,21 @@
     (.stroke context)))
 
 (defn draw-start-finish-marker [context row col size]
-  (let [color "#ff0000"]
+  (let [color "#d02426"]
     (draw-rect-tile context row col color size)))
-
-(defn draw-path-market [context row col])
 
 (defn draw-path [context path size]
   (doseq [node path]
     (draw-circle context (nth node 0) (nth node 1) "#00ff00" size)))
+
+(defn draw-visited [context visited size]
+  (let [width 2
+        pos-start (fn [n] (- (+ (* n size) (/ size 2)) 1))]
+    (doseq [node visited]
+      (let [y (pos-start (first node))
+            x (pos-start (second node))]
+        (set! (.-fillStyle context) "rgba(255, 255, 255, 0.5)")
+        (.fillRect context x y width width)))))
 
 ;; context - Canvas context
 ;; row -
@@ -94,7 +100,9 @@
       (draw-start-finish-marker context finish-row finish-col size))
 
     ; draw path (if exists)
-    (draw-path context (:path app-state) size)))
+    (draw-path context (:path app-state) size)
+    (when (:draw-visited app-state)
+      (draw-visited context (:visited app-state) size))))
 
 (defn mouse-pos-at
   [canvas e]
@@ -112,15 +120,12 @@
   "Increase cost at x, y position in the world passed in via the app-state
   cursor."
   [app-state x y multiplier]
-  (let [brush-size (:brush-size @appstate/app-state)
-        matrix (get-in @appstate/app-state [:brush-size-options brush-size :matrix])
-        new-world (utils/update-world (:world @appstate/app-state)
+  (let [brush-size (:brush-size @app-state)
+        matrix (get-in @app-state [:brush-size-options brush-size :matrix])
+        new-world (utils/update-world (:world @app-state)
                                       matrix
                                       x y multiplier)]
-    ;; TODO updating app-state right here takes a LONG time because it renders
-    ;; all components w/ a cursor to :world. We need to use cursors for other
-    ;; non-canvas components, instead of just passing in the whole state.
-    (om/update! app-state :world new-world)))
+    (appstate/update-world-state! app-state new-world)))
 
 (defn erase-at
   [app-state tile-pos]

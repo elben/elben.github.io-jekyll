@@ -5,12 +5,26 @@
             [cljs.core.async :refer [put! chan <!]]
             [planjure.utils :as utils]
             [planjure.plan :as plan]
+            [planjure.appstate :as appstate]
             [planjure.history :as history]))
-
-(def plan-chan (chan))
 
 (def algorithms {:dijkstra {:name "Dijkstra" :fn (utils/time-f plan/dijkstra)}
                  :dfs      {:name "Depth-first" :fn (utils/time-f plan/dfs)}})
+
+(defn checkbox-component [cursor owner]
+  (reify
+    om/IRenderState
+    (render-state [_ {:keys [configuration-chan label-text input-name]}]
+      (dom/div
+        #js {:className "checkbox-row"}
+        (dom/label
+          nil
+          (dom/input #js {:type "checkbox"
+                          :value ""
+                          :onChange #(put! configuration-chan {:kind :checkbox
+                                                               :input-name input-name
+                                                               :value (.. % -target -checked)})})
+          label-text)))))
 
 (defn item-selector-component [cursor owner]
   (reify
@@ -102,7 +116,7 @@
   (reify
     om/IInitState
     (init-state [_]
-      {:plan-chan plan-chan
+      {:plan-chan appstate/plan-chan
        :configuration-chan (chan)})
 
     om/IWillMount
@@ -110,16 +124,17 @@
       (let [configuration-chan (om/get-state owner :configuration-chan)]
         (go
           (while true
-            (let [[v ch] (alts! [plan-chan configuration-chan])]
+            (let [[v ch] (alts! [appstate/plan-chan configuration-chan])]
               (println v)
-              (when (= ch plan-chan)
+              (when (= ch appstate/plan-chan)
                 (let [algo-fn ((algorithms (:algo @app-state)) :fn)
                       result (algo-fn (:world @app-state) (:setup @app-state))]
-                  ;; Need to @app-state here because cursors (in this case,
+                  ;; Need to @app-state above because cursors (in this case,
                   ;; app-state) are not guaranteed to be consistent outside of the
                   ;; React.js render/render-state cycles.
                   (om/update! app-state :last-run-time (result :time))
-                  (om/update! app-state :path (result :return))))
+                  (om/update! app-state :visited (:visited (result :return)))
+                  (om/update! app-state :path (:path (result :return)))))
               (when (= ch configuration-chan)
                 (case (:kind v)
                   :algorithm
@@ -132,9 +147,9 @@
                           world-num-tiles (get-in @app-state [:world-size-options world-size :size])
                           last-row-col (dec world-num-tiles)]
                       (om/update! app-state :world-size world-size)
-                      (om/update! app-state :world (plan/random-world world-num-tiles world-num-tiles))
                       (om/update! app-state [:setup :finish] [last-row-col last-row-col])
                       (om/update! app-state :path [])
+                      (appstate/update-world-state! app-state (plan/random-world world-num-tiles world-num-tiles))
                       (history/reset))
 
                     :history
@@ -145,7 +160,15 @@
                       (history/redo))
 
                     ;; Default case
-                    (om/update! app-state (:tool-kind v) (:value v))))))))))
+                    (om/update! app-state (:tool-kind v) (:value v)))
+
+                  :checkbox
+                  (case (:input-name v)
+                    :replan
+                    (om/update! app-state :replan (:value v))
+
+                    :draw-visited
+                    (om/update! app-state :draw-visited (:value v))))))))))
 
     om/IDidMount
     (did-mount [this] nil)
@@ -222,8 +245,15 @@
               ;; https://github.com/swannodette/om/wiki/Basic-Tutorial#intercomponent-communication
               ;; This grabs plan-chan channel, and puts "plan!" in the channel. The
               ;; world canvas component listens to this global channel to plan new paths.
-              (dom/button #js {:onClick #(put! (om/get-state owner :plan-chan) "plan!")} "Plan Path"))))
-        
+              (dom/button #js {:onClick #(put! (om/get-state owner :plan-chan) "plan!")} "Plan Path"))
+            (dom/div
+              nil
+              (om/build checkbox-component {}
+                        {:init-state {:configuration-chan configuration-chan
+                                      :input-name :replan :label-text "RE-PLAN"}})
+              (om/build checkbox-component {}
+                        {:init-state {:configuration-chan configuration-chan
+                                      :input-name :draw-visited :label-text "VISITED"}}))))
         (dom/div
           nil
           (dom/div #js {:className "section-title"} "Statistics")
