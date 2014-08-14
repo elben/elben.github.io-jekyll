@@ -55,7 +55,7 @@ p {
   margin: 0;
   font-size: 1em;
   line-height: 1.5em;
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
 }
 
 a {
@@ -97,8 +97,9 @@ code {
   line-height: 1em; /* For some reason, 1em for monospace fonts gives us vertical rhyhtm. */
   font-weight: 400;
 
+  padding: 0.2em 0.2em 0.1em;
   /* padding: 3px 3px 1px; */
-  /* background: #e8dfd6; */
+  background: #eee6dd;
 }
 
 .highlight code {
@@ -107,7 +108,7 @@ code {
 }
 
 pre {
-  line-height: 1.5em;
+  line-height: 1.3em;
   font-family: Consolas, "inconsolata-1", "inconsolata-2", monospace;
   border-left: 8px solid #ece5dc;
   padding: 0 1em;
@@ -138,7 +139,7 @@ pre {
  */
 
 h1 {
-  font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
+  font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
   font-size: 1.777em;
 
   /* This line-height calculated by pretending our base rhyhtm is at 13.5px
@@ -154,7 +155,7 @@ h1 {
 }
 
 h2 {
-  font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
+  font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
   font-size: 1.333em;
   font-weight: bold;
 
@@ -165,23 +166,25 @@ h2 {
    * proximity.
    */
   line-height: 1.12528132em;
-  margin: 0 0 .28132033em 0;
+  margin: 2em 0 1em 0;
+  /* margin: 0 0 .28132033em 0; */
   /* margin: 0 0 1.12528132em 0; */
 }
 
 h3 {
-  font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
+  font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
-  margin: 1em 0 0em;
+  margin: 2em 0 0em;
 }
 
-ul {
+ul.simple {
   list-style: none;
   margin-left: -1em;
   margin-top: 0;
   margin-bottom: 1.5em;
   padding-left: 1em;
+  line-height: 1.5em;
 }
 
 #structure {
@@ -286,13 +289,13 @@ ul {
 }
 
 .meta {
-  font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
+  font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
   /* Grey with reddish saturation */
   color: #b3a9a6;
 }
 
 .article-metadata {
-  font-family: "Avenir", "Helvetica Neue", helvetica, sans-serif;
+  font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
   /* Grey with reddish saturation */
   color: #b3a9a6;
   font-size: 0.75em;
