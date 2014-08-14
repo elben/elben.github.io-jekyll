@@ -5,10 +5,10 @@ categories: blog
 tags: clojure
 ---
 
-K-means is one of those algorithms that have hundreds of tutorials floating
-around on the internet. But I implemented k-means as a way to learn Clojure.
-This article is part walkthrough of the code and part a reflection on what I've
-learned. I hope it provides some insight from a beginner's point-of-view.
+Let's face it, the world does not need another k-means tutorial. So why does
+this article exist? Because I implemented k-means to learn Clojure, and I wanted
+to give some insight from a beginner's point-of-view. This article, then, is
+part walkthrough and part reflection on what I've learned.
 
 ## K-means
 
@@ -16,9 +16,19 @@ Say that a clothing brand may want to know how they should cut
 their shirts for sizes Small, Medium and Large. They can measure a bunch of
 people's waists and chests and get a graph that looks something like this:
 
+Say that a clothing brand may want to know how they should cut
+their shirts for sizes Small, Medium and Large. They can measure a bunch of
+people's waists and chests and get a graph that looks something like this:
+
+### Another subheader
+
+Say that a clothing brand may want to know how they should cut
+their shirts for sizes Small, Medium and Large. They can measure a bunch of
+people's waists and chests and get a graph that looks something like this:
+
 ![K-means 1](http://cl.ly/image/2R3D3u0N3w45/k-means.001.png)
 
-Humens excel at recognizing patterns—you probably picked out three clusters
+Humans excel at recognizing patterns—you probably picked out three clusters
 right away. But how do we get a computer to do this? This is where clustering
 algorithms like k-means comes in.
 
@@ -53,15 +63,18 @@ cut our Small, Medium and Large sizes to accomodate the people in the cluster.
 
 ![K-means 6](http://cl.ly/image/2z2H3C2V1g3H/k-means.006.png)
 
-## Code
+## Walkthrough and takeaways
 
-The k-means algorithm can easily be written without needing state modifications.
-Clojure's data structures makes this easy, even almost *mandatory*. So we can
-write the core algorithm in a stateless fashion. But because k-means is an
-interative approach, this implies that someone else will have to keep state. In
-this case, I've deffered the state changes to the UI that I wrote on top.
+I found that the k-means algorithm can easily be written without needing to keep
+any state. This was not obvious to a beginner like myself, but Clojure's
+immutable data structures guide or even force you to write code in a stateless
+fashion.
 
-The code is [here](https://github.com/elben/k-means/). To run the demo:
+And though I introduce state in the demo part of the code (written in
+[Quil](https://github.com/quil/quil)), the core k-means functions remain
+stateless.
+
+The code can be found [here](https://github.com/elben/k-means/). To run the demo:
 
 {% highlight bash %}
 git clone https://github.com/elben/k-means.git
@@ -102,7 +115,8 @@ associates that point with the closest center. The function returns a vector of
 points for each center. Here is a test for `points-to-centers`:
 
 {% highlight clojure %}
-;; Points 10,10 and 20,20 go to center 0, and point 100,100 goes to center 1.
+;; Points (10, 10) and (20, 20) are associated with center 0,
+;; and point (100, 100) with center 1.
 (= [[[10 10] [20 20]] [[100 100]]]
    (points-to-centers [[10 10] [20 20] [100 100]]
                       [[0 0] [100 100]]))))
@@ -119,29 +133,37 @@ Here is a test for `center-of-points`:
 {% endhighlight %}
 
 I won't go into detail of the [rest of the code](https://github.com/elben/k-means/blob/master/src/k_means/core.clj)
-here, mostly because I don't think what's important here is the code.
+here, mostly because I don't think that it's very interesting (basically a lot of `map`s
+and `reduce`s).
 
-## Takeaways
+The simplicity of the code (boring, I would say) is intruiging. When I started
+this project, I knew `defn`, `vec`, `map` and `reduce`. That was about it. This
+project uses no fancy methods or features because functions like `map` and
+`reduce` give you so much power already.
 
-I started this project because I wanted learn Clojure. I had been writing
-Clojure snippets here and there, through [Clojure Koans](http://clojurekoans.com/).
-But it's hard to get a feel for the benefits of Clojure's ideals without
-implementing something of a larger scale. This k-means project, however,
-taught me a lot of things about Clojure and functional programming.
+Another thing that intruigdes me is how simple the "interface" is. It is just
+one function, `update-centers`. At the end of the day, the function simply takes
+in a bunch of vectors and spits out other bunches of vectors. Anyone who knows
+the tinest amount of Clojure can call and use this function. There is no
+"secret" knowledge to learn; it is all ordinary.
 
-**You can do a lot with little**. When I started this project, I knew `defn`,
-`vec`, `map` and `reduce`. That was about it. This project uses no fancy methods
-or features. But even with a small toolset, I was able to 
+Whereas in a typical object-oriented world, it's common to `class`-ify
+everything because objects, not functions, rule the world (it's in the name). We
+probably would have had `Point`, `Center`, `Cluster` and `KMeans` classes.
+The user of the library would have to understand what each class did and who
+modifies what. It is a great evil that object-oriented languages revere objects
+and supress the functions that do the actual work.
 
-**Persistent data structures simplify reasoning**. You know what your functions
-ought to do. There is no fear of unknown side-effects. Consider this snippet:
+I also found that immutable data structures really do simplify things. You know
+what your functions ought to do, and there is no fear of unknown side-effects.
+Consider this snippet:
 
 {% highlight clojure %}
 (defn center-of-points [points]
   "Return the mean center of the given points"
   ...)
 
-(def points [1 2 3])
+(def points [[0 0] [5 5]])
 (center-of-points points)
 {% endhighlight %}
 
@@ -149,21 +171,25 @@ I don't have to worry about what may happen to `points`. Can I use `points`
 again? Should I have cloned it before passing it into `center-of-points`? These
 questions simply go away.
 
-**Persistent data structures encourages modularity**. When your functions
-*cannot* mutate your data structures, it forces your hand towards modular
-design, whether you intended to or not. I found myself using `let` to do this.
-For example:
+Immutability also encourages modularity. When you can't modify your data and
+override your local variables, you are essentially guided towards modular
+design. Instead of focusing on variables, you focus on writing small,
+manageable functions.
 
-{% highlight clojure %}
-(let [a (f1 args)
-      b (map f2 a)]
-  (f3 b))
-{% endhighlight %}
-
-**Persistent data structures simplify testing**. Similar to the modularity
-comment, I found that testing became much more obvious. As your functions get
-smaller and more modular, your tests follow. Data in, data out. No need for
-cumbersome setup and state change verifications.
+Finally, this immutability and modularity is a tremendous help to testability.
+As your functions get smaller and more modular, your tests become easier to
+write and maintain because they too get smaller and more modular. This is only
+natural. I also found no need for cumbersome setup/teardown procedures and
+state-change verifications at the unit testing layer. Mostly because there is no
+state.
 
 ## Conclusion
 
+This project was a lot of fun. I started with knowing very little Clojure, and
+finished knowing still very little. But this project revealed how compelling
+Clojure's ideas are. I started not knowing how I would handle immutable data
+structures, and I finished wishing every language had immutable data structures.
+I started not knowing how to organize code without classes and objects, and I
+finished with a great appreciation for the power of simple, ordinary functions.
+
+Clojure really does change the way you think. I can't wait to learn more.
