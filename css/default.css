@@ -138,8 +138,11 @@ pre {
  * make each element hit the right vertical line.
  */
 
-h1 {
+h1,h2,h3,h4,h5,h6 {
   font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
+}
+
+h1 {
   font-size: 1.777em;
 
   /* This line-height calculated by pretending our base rhyhtm is at 13.5px
@@ -155,9 +158,8 @@ h1 {
 }
 
 h2 {
-  font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
   font-size: 1.333em;
-  font-weight: bold;
+  font-weight: 600;
 
   /* For a font size 1.333em, per our chart above, we have a line height of
    * 1.12528132em. For "perfect" alignment, our margin-bottom should also be
@@ -172,7 +174,6 @@ h2 {
 }
 
 h3 {
-  font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
   margin: 1.5em 0 0em;
