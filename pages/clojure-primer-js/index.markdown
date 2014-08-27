@@ -42,7 +42,7 @@ o.foo
 // ⇒ 0
 ```
 
-Functions are values
+Functions are values:
 
 ```clojure
 (map inc [1 2 3])

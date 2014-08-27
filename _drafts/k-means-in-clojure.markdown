@@ -3,6 +3,7 @@ layout: post
 title:  "K-Means in Clojure"
 categories: blog
 tags: clojure
+draft: true
 ---
 
 Let's face it, the world does not need another k-means tutorial. So why does

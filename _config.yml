@@ -3,3 +3,9 @@ markdown: redcarpet
 highlighter: pygments
 port: 4001
 permalink: /:categories/:title/
+
+production_url: http://elbenshira.com
+
+author:
+  name: Elben Shira
+  email: elbenshira@gmail.com
