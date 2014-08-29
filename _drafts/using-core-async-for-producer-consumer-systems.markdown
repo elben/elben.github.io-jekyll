@@ -6,11 +6,11 @@ tags: clojure
 draft: true
 ---
 
-Say we want to process a lot of data coming in from a single source (e.g. stdin) and then output the processed data to a single destination (e.g. stdout).
+Say we want to process a lot of data coming in from a single source (e.g. stdin) and then output the results to a single destination (e.g. stdout). We can think of this as a producer-consumer problem.
 
 <div class="some-padding"><img src="{{ site.url }}/images/core-async-pattern/core-async-pattern-1.png"/></div>
 
-In Clojure we can do something naive like this:
+A naive solution may look like this:
 
 ```
 (defn process
@@ -27,7 +27,7 @@ In Clojure we can do something naive like this:
 	(println line))
 ```
 
-But if `process` is expensive, we'd find this program unacceptably slow. This baseline program takes 115.5 seconds using 9% of the CPU to process 10,000 lines on my computer.
+But if `process` is expensive, we'd find this program unacceptably slow. On my machine, this baseline program takes 115.5 seconds using 9% of the CPU to process 10,000 lines.
 
 When the processing logic is expensive (whether CPU or I/O), we often deploy thread pools to take advantage of our multi-core CPUs. On the JVM we can use `java.util.concurrent.Executors` to deploy a pool of process workers. Each worker can then output their work into a shared concurrent queue, and another thread can consume from this queue to print to stdout.
 
@@ -54,7 +54,7 @@ To do this, we first create our channels:
 (def out-chan (async/chan))
 ```
 
-Then we write our consumers. Using the `async/thread` macro, we put each consumer on its own thread so that they can do blocking takes and puts. We could use go threads here, which uses its own thread pool, but I've found that go threads result in less throughput than devoted consumer threads for CPU-heavy consumers.
+Then, using the `async/thread` macro, we put each consumer on its own thread so that they can do blocking takes and puts. We could use a go block here, which employs its own thread pool, but I've found that go threads result in less throughput than devoted consumer threads for CPU-heavy consumers. Our consumers look like this:
 
 ```clojure
 (defn start-async-consumers

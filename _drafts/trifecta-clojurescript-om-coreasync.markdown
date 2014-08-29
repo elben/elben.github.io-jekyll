@@ -238,6 +238,68 @@ I don't mean, of course, that your programs will be bug or frustration free. But
 
 ## How to communicate
 
+JavaScript environments are asynchronous—we use callbacks to handle events. Let's say we're building a document editor and we want to save the document either when the user clicks `[Save]` or `[Exit]`. Saving a document may take several seconds, so we should ignore new save requests if the current one is in-flight (e.g. the user clicks `[Save]` and `[Exit]` consecutively).
+
+If we were writing this in Backbone.js, we may have components that look like this
+
+```javascript
+var SaveButtonView = Backbone.View.Extend({
+  events: {
+    'click .save-button': 'save'
+  },
+  save: function () { this.model.save(); }
+});
+
+var ExitButtonView = Backbone.View.Extend({
+  events: {
+    'click .exit-button': 'save'
+  },
+  save: function () { this.model.save(); }
+});
+
+var SaveButtonModel = Backbone.Model.Extend({
+  save: function () { this.document.save(); }
+});
+
+var ExitButtonModel = Backbone.Model.Extend({
+  save: function () { this.document.save(); }
+});
+
+var DocumentModel = Backbone.Model.Extend({
+  save: function () { /* complex logic */ }
+});
+```
+
+But now let's say we want *two* GET requests to succeed before we print `Done!`. Furthermore, print `Failed!` on failure if one of the requests fail. The naive approach is
+
+```javascript
+// TODO test this
+$.get(opts1, function () {
+	$.get(opts2, function () {
+    console.log("Done!");
+  }, function () {
+    console.log("Failed!");
+  });
+}, function () {
+  console.log("Failed!");
+});
+```
+
+Even from the code above, and from many of our experiences, we realize that callbacks become unwieldy and cumbersome as our logic increases in complexity. Callback hell, it's often called. Many go to *promises* to ease the pain. Our code now looks something like this
+
+```javascript
+```
+
+```clojure
+
+```
+
+=========
+
+- two ways to save a document, say Ctrl+S or clicking "Save". We can have two channels, same place to do the logic.
+	- using events is too loose—anyone can capture events
+	- both components would need to hold the save logic (e.g. share ref to obj)
+
 One final problem to address is communication.
 
 Say we have an input field that holds a HEX value. We want the background color of the page to change to whatever value the user types in. In JavaScript, we may do something like this:
@@ -248,6 +310,10 @@ $("input.hex-value").onchange(function () {
   $("body").css("background", $(this).val());
 });
 ```
+
+- `go` is a macro
+	- allows async code to look like synchronous code
+	- allows you to move logic to proper place, separating mechanism of data transfer (e.g. browser events) from the logic.
 
 ## Moving forward
 
