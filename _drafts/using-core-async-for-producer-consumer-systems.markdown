@@ -12,7 +12,7 @@ Say we want to process a lot of data coming in from a single source (e.g. stdin)
 
 A naive solution may look like this:
 
-```
+```clojure
 (defn process
   "Do 'work'"
   [line]
