@@ -78,6 +78,11 @@ hr {
   margin: 23px 0;
 }
 
+/* Useful to give an image some breathing room */
+.some-padding {
+  padding: 1em 0;
+}
+
 img {
   border: 0px;
 }
