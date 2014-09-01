@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Using core.async for Producer-consumer Workflows"
+title: "Using core.async for Producer-Consumer Workflows"
 categories: blog
 tags: clojure
 ---
 
-I've found core.async to be a versatile library for many workflows. This post examines how we can use core.async to share work between multiple consumers.
+I've found core.async to be versatile for many workflows. One that I've used on several occasions is a producer-consumer model to distribute work among multiple consumers.
 
 Say we want to process a lot of data coming in from a single source (e.g. stdin) and then output the results to a single destination (e.g. stdout). We can think of this as a producer-consumer problem.
 
