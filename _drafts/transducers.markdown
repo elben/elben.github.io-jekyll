@@ -274,7 +274,7 @@ Using Clojure's transducer library:
 
 How do transducers work across core.async channels?
 
-First, note that channel buffers are linked lists underneath (in fact, `java.util.LinkedList`s). When you put a value into a channel, an internal helper method `add!` is called to put your item into the buffer.
+First, note that channel buffers are linked lists underneath (in fact, `java.util.LinkedList`s). When you put an item into a channel, an internal helper method `add!` is called to put your item into the buffer.
 
 But if a transducer `xform` is supplied, core.async will use `add!` as the reducing function passed into `xform`:
 
