@@ -63,6 +63,8 @@ As you can see, we had to use two vectors to do two reduces. But with transducer
 Let's say we compose some functions like below, where `mapping` and `filtering` are our own versions of `map` and `filter`:
 
 ```clojure
+(defn square [x] (* x x))
+
 (def xform
   (comp
     (filtering even?) 
@@ -121,7 +123,9 @@ This transducer is a function that looks like this:
     (reducing result (inc input))))
 ```
 
-So it's waiting for a reducing function. What's a reducing function? In our beginning examples, we used `conj` in our `reduce` calls. Well, here we can also use `conj` as our reducing function.
+So it's waiting for a reducing function. A reducing function has the type `result, input ⟶ result`. It's used to reduce the current result-so-far with a current input into some new result-so-far.
+
+`conj` is a reducing function, since it takes a collection, an input, and returns a new collection.
 
 ```clojure
 ((mapping inc) conj)
@@ -148,7 +152,7 @@ We can invoke the function to see how it behaves:
 ; ⇒ [2 3 4]
 ```
 
-Interesting—it seems that our function `((mapping inc) conj)` behaves like a reducing function. This means that we can use it in `reduce`!
+Indeed, our function `((mapping inc) conj)` behaves like a reducing function. We can use it in `reduce`!
 
 ```clojure
 (reduce ((mapping inc) conj) [] [1 2 3 4])
@@ -158,20 +162,24 @@ Interesting—it seems that our function `((mapping inc) conj)` behaves like a r
 ; ⇒ #{4 3 2 5}
 ```
 
-And what if we replace `conj` with `inc`?
+And what if we replace `conj` with `+`?
 
 ```clojure
 (reduce ((mapping inc) +) 100 [1 2 3 4])
 ; ⇒ 114
 ```
 
-We see here that our transducer `(mapping inc)` should be used together with a reducing function (e.g. `conj`, `+`, our own function) and some initial state (e.g. `[]`, `#{}`, `100`).
+So `+` is also a reducing function. Notice `+` has the type `result, input ⟶ result`.
+
+And since our transducer `(mapping inc)` takes `+` and returns another reducing function, this implies that transducers have the type `(result, input ⟶ result) ⟶ (result, input ⟶ result)`. Rich Hickey pointed this out in the post [Transducers are coming](http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming).
+
+To recap, a transducer expects you to give it a reducing function (e.g. `conj`, `+` or one of our own). When you do this, you get back a reducing function that you can use in `reduce`.
 
 That's it—we have our first transducer with only a few lines of code.
 
 ## The filtering transducer
 
-We now write `filtering`, the function that builds transducers that filter things out.
+We now write `filtering`, a function that builds transducers that filter things out.
 
 ```clojure
 (defn filtering [predicate]
@@ -182,16 +190,16 @@ We now write `filtering`, the function that builds transducers that filter thing
         result))))
 ```
 
-Like `mapper`, we build a transducer by passing our builder a function. In this case, this function is a predicate that should return a boolean. What's interesting about `filtering` compared to `mapping`, however, is that if the predicate fails, it will not call the inner reducing function. Instead it short-circuits and returns the current result.
+Like `mapper`, we build a transducer by passing our builder a function. In this case, this function is a predicate that should return a boolean. What's interesting about `filtering` when compared to `mapping`, however, is that if the predicate fails, `filtering` will not call the inner reducing function. Instead, it will short-circuit and return the current result right away.
 
 Some concrete examples of `filtering` transducers at work:
 
 ```clojure
-(((filtering even?) conj) [2 4 6] 9)
-; ⇒ [2 4 6]
-
 (((filtering even?) conj) [2 4 6] 8)
 ; ⇒ [2 4 6 8]
+
+(((filtering even?) conj) [2 4 6] 9)
+; ⇒ [2 4 6]
 
 (reduce ((filtering even?) conj) [] [1 2 3 4 5 6])
 ; ⇒ [2 4 6]
@@ -200,13 +208,15 @@ Some concrete examples of `filtering` transducers at work:
 ; ⇒ 12
 ```
 
-Notice that when the filter fails (e.g. `9` is not even), then the supplied reducing function (e.g. `conj` or `+`) is not invoked.
+Notice that when the filter fails (e.g. `9` is not even), the supplied reducing function (e.g. `conj` or `+`) is not invoked.
 
 ## Composing transducers
 
 Recall the `xform` we had before:
 
 ```clojure
+(defn square [x] (* x x))
+
 (def xform
   (comp
     (filtering even?) 
@@ -215,24 +225,66 @@ Recall the `xform` we had before:
     (mapping inc)))
 ```
 
-Imagine this transducer is being used in some reduce function, and we have so far collected in our results the vector `[5 37]`. Say the current input in question is `12`. Since `12` is even, it will pass the first filter. This first filter will then call its reducing function, passing in `[5 37]` and `12`. In this case, the reducing function is the “rest” of the transformation, which is the second filter `#(< % 10)`. Since `12` fails the second filter, the third reducing function is not called, and the result-so-far `[5 37]` is returned.
+This may be a surprise, but `xform` is a transducer!
 
-But if the input in question is `8`, it would pass both filters and arrive at the mapping transforms, which will transform `8` to `65`. These reducing functions would then somehow combine `65` with the vector `[5 37]`. But how do we combine it? We're still missing a final reducing function—one that will reduce the current result `[5 37]` with the new value `65`.
-
-A sensible thing to do would be to `conj` `65` into `[5 37]`. So we choose `conj` by passing this in as the final reducing function into the `xform` transducer.
+Recall that `(comp a b c d)` returns a function:
 
 ```clojure
-(xform conj)
+(fn [r] (a (b (c (d r)))))
 ```
 
-And now, we can now use `xform`!
+Say we invoke the new composed function by passing some `r`. In our case, `d` is the function `(mapping inc)`, which we know is a transducer. So if `r` is a reducing function, say `conj`, then we would have `((mapping inc) conj)`, which we know returns *another* reducing function. Well, this result is then passed into the function `(mapping square)`, which is another transducer. When you do that, this returns *another* reducing function. And we do this all the way to the first transducer in our composition, `(filtering even?)`.
+
+This means that when we give a reducing function to `xform` like `(xform conj)`, we get back a function that will apply the left-most reducing function first, then down the stack until the last reducing function, `conj`, is applied to the current result and input.
+
+Imagine this transducer is being used in some reduce function, and we have so far collected in our results the vector `[5 17]`. Say the current input in question is `12`. Since `12` is even, it will pass the first filter. This first filter will then call its reducing function, passing in `[5 17]` and `12`. In this case, the reducing function is the “rest” of the transformation, which is the second filter `#(< % 10)`. Since `12` fails the second filter, the third reducing function is not called, and the result-so-far `[5 17]` is returned.
+
+But if the input in question is `6`, it would pass both filters and arrive at the mapping transforms, which will transform `6` to `37`. We then pass this input to the final reducing function, `conj`, which will join `[5 17]` with the new value `37`.
 
 ```clojure
+((xform conj) [5 17] 12)
+; ⇒ [5 17]
+
+((xform conj) [5 17] 6)
+; ⇒ [5 17 37]
+
 (reduce (xform conj) [] (range 10))
 ; ⇒ [5 17 37 65]
 ```
 
-Observe that the transducers run left-to-right, whereas `comp` applies right-to-left. This is because `((comp a b c) x)` expands to `(a (b (c x)))`. And so when we pass in our final reducing function `(xform conj)`, we get back a function that will apply the top-most reducing function first, then down the stack until the last reducing function `conj` is applied to the current result and input.
+Being able to compose transducers is an important pillar for transducers. We see that it's quite simple to do, and that what powers composition underneath the hood are ordinary functions.
+
+## Transducers in core.async
+
+Another major selling point of transducers is that a transducer can work across core.async channels. For example, we should be able to take our `xform` transducer and use it to filter and transform items in a channel.
+
+Using Clojure's transducer library:
+
+```clojure
+(def my-chan (chan 1 xform))
+
+(put! my-chan 3)
+(take! my-chan println)
+; ⇒ nil, since 3 is not even
+
+(put! my-chan 4)
+(take! my-chan println)
+; ⇒ 17, since 4 is even and less than 10
+```
+
+How do transducers work across core.async channels?
+
+First, note that channel buffers are linked lists underneath (in fact, `java.util.LinkedList`s). When you put a value into a channel, an internal helper method `add!` is called to put your item into the buffer.
+
+But if a transducer `xform` is supplied, core.async will use `add!` as the reducing function passed into `xform`:
+
+```clojure
+(xform add!)
+```
+
+This means that any item put into a channel will first be transformed by our transducer. And if the transducer filters an item (e.g. doesn't pass `(filter even?)`), then the final reducing function `add!` is never called. Thus the item is never added to the channel's buffer.
+
+The pertinent code can be found in the core.async sources, [here](https://github.com/clojure/core.async/blob/ac0f1bfb40237a18dc0f03c0db5df41657cd23a6/src/main/clojure/clojure/core/async/impl/channels.clj#L287).
 
 ## Conclusion
 
@@ -242,7 +294,7 @@ If you're interested in learning more, I encourage you to tackle the problems be
 
 # Problems sets
 
-Solutions can be found in [this repo](http://github.com/elben/).
+[Solutions can be found here](https://gist.github.com/elben/da8864e120c373e5fcf0).
 
 **Write a `transduce` helper function**
 
@@ -253,16 +305,23 @@ Right now, our use of `reduce` is a bit clunky. Write a function `transduce` tha
 ; ⇒ [5 17 37 65]
 ```
 
-**Write a `flatmap` transducer**
+**Write a `mapcat` transducer**
 
-Write a transducer-builder for `flatmap`. Something like this:
+Write a transducer-builder for `mapcat`. Examples of `mapcat` (no transducers):
 
 ```clojure
-(defn flatmapping [f] ???)
-
 (defn twins [x] [x x])
 
-(reduce ((flatmapping twins) conj) [] (range 10))
+(mapcat twins (range 10))
+; ⇒ (0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9)
+```
+
+The transducer should work like this:
+
+```clojure
+(defn mapcatting [f] ???)
+
+(reduce ((mapcatting twins) conj) [] (range 10))
 ; ⇒ [0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7 8 8 9 9]
 ```
 
@@ -279,138 +338,10 @@ Write a transducer-builder for `take`. Something like this:
 
 Note that you may need to keep some state for this one. 
 
-**Explore how transducers work with core.async**
-
-I have no idea!
-
 # References
+
+[Understanding Transducers guide](https://gist.github.com/elben/da8864e120c373e5fcf0)
 
 [Tom Ashwroth: CSP and transducers in JavaScript](http://phuu.net/2014/08/31/csp-and-transducers.html)
 
 [Rich Hickey: Transducers are coming](http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming)
-
-# Saved snippets
-
-DON'T READ THIS! OUT OF DATE.
-
-How does this all work?
-
-Let's simplify our `xform` function:
-
-```clojure
-(def xform
-  (comp
-    (filtering even?) 
-    (mapping square)))
-```
-
-If we expand `(xform conj)`, we get:
-
-```clojure
-(xform conj)
-
-; expands to
-
-((comp (filtering even?) (mapping square) conj)
-
-; evaluates to
-
-((filtering even?) ((mapping square) conj))
-```
-
-Recall that `(filtering even?)` and `(mapping square)` return transducers, and transducers are functions that take a reducing function.
-
-Expanding `(mapping square)`:
-
-```clojure
-(defn mapping [f]
-  (fn [reducing]
-    (fn [result input]
-      (reducing result (f input)))))
-
-; evaluate, substituting f with square
-
-(fn [reducing]
-  (fn [result input]
-    (reducing result (square input))))
-```
-
-So `((mapping square) conj)` evaluates to
-
-```clojure
-(fn [reducing]
-  (fn [result input]
-    (reducing result (square input))))
-
-; evaluate, substituting reducing with conj
-
-(fn [result input]
-  (conj result (square input)))
-```
-
-We pass the result of `((mapping square) conj)` into `(filtering even?)`. We can evaluate `(filtering even?)` to:
-
-```clojure
-(filtering even?)
-
-; expands to
-
-(defn filtering [predicate]
-  (fn [reducing]
-    (fn [result input]
-      (if (predicate input)
-        (reducing result input)
-        result))))
-
-; substituting predicate with even?
-
-(fn [reducing]
-  (fn [result input]
-    (if (even? input)
-      (reducing result input)
-      result)))
-```
-
-So now we evaluate
-
-```clojure
-((filtering even?)
-  (fn [result input]
-    (conj result (square input))))
-
-; evaluating (filtering even?)
-
-((fn [reducing]
-  (fn [result input]
-    (if (even? input)
-      (reducing result input)
-      result)))
-  (fn [result input]
-    (conj result (square input))))
-
-; function application
-
-(fn [result1 input1]
-  (if (even? input1)
-    ((fn [result2 input2]
-       (conj result2 (square input2)))
-     result1 input1)
-    result1))
-```
-
-OK that was a lot. All that means, `xform` is this function
-
-```clojure
-(fn [result1 input1]
-  (if (even? input1)
-    ((fn [result2 input2]
-       (conj result2 (square input2)))
-     result1 input1)
-    result1))
-```
-
-TODO: try to add the js bin thing?
-- http://cognitect.github.io/transit-tour/
-- https://github.com/kanaka/clojurescript
-
---—
