@@ -8,11 +8,11 @@ draft: true
 
 What are transducers? How do they work?
 
-These are questions that I think many of us have. *Using* transducers is easy enough—but how do they work underneath the hood?
+These are questions that I think many of us have. Using transducers is easy enough—but how do they work underneath the hood?
 
 After reading Tom Ashworth's fine blog post, [CSP and transducers in JavaScript](http://phuu.net/2014/08/31/csp-and-transducers.html), I decided to re-implement transducers to comprehend this stuff. We won't spend time building transducers “from the ground up” by applying abstractions, as Tom did. Instead, we'll explore transducers by writing, examining and using transducer-building functions.
 
-I encourage you to type these examples into your REPL, or use [clojurescript.net](http://clojurescript.net/).
+I encourage you to type these examples into your REPL, or use [clojurescript.net](http://clojurescript.net/). The source code from this post can be found [here](https://gist.github.com/elben/da8864e120c373e5fcf0).
 
 ## Reduce everything
 
@@ -60,7 +60,7 @@ A key insight, however, is that `map` and `filter` can be defined using `reduce`
 
 As you can see, we had to use two vectors to do two reduces. But with transducers, our goal is to compose these two reduces into one reducing function that won't need any intermediate data structures.
 
-Let's say we compose some functions like below, where `mapping` and `filtering` are our own versions of `map` and `filter`:
+Let's say we compose the function below, where `mapping` and `filtering` are our own versions of `map` and `filter`:
 
 ```clojure
 (defn square [x] (* x x))
@@ -73,16 +73,16 @@ Let's say we compose some functions like below, where `mapping` and `filtering` 
     (mapping inc)))
 ```
 
-Our goal is to be able to use `xform` to define some function that will act as our reducing function.
+Our goal is to somehow use `xform` to filter-and-map a collection without using any intermediate collections.
+
+We want something like this:
 
 ```clojure
-(def my-function (xform ???))
-
-(reduce my-function [] (range 10))
+(reduce (??? xform ???) [] (range 10))
 ; ⇒ [1 5 17 37 65]
 ```
 
-And this reduce should not use intermediate collections underneath the hood.
+To do this, we need some transducers.
 
 ## Our first transducer
 
@@ -274,7 +274,7 @@ Using Clojure's transducer library:
 
 How do transducers work across core.async channels?
 
-First, note that channel buffers are linked lists underneath (in fact, `java.util.LinkedList`s). When you put an item into a channel, an internal helper method `add!` is called to put your item into the buffer.
+First, note that channel buffers are linked lists underneath (in fact, `java.util.LinkedList`s). When you put an item into a channel, an internal helper method `add!` is called to add your item into the buffer.
 
 But if a transducer `xform` is supplied, core.async will use `add!` as the reducing function passed into `xform`:
 
@@ -282,7 +282,7 @@ But if a transducer `xform` is supplied, core.async will use `add!` as the reduc
 (xform add!)
 ```
 
-This means that any item put into a channel will first be transformed by our transducer. And if the transducer filters an item (e.g. doesn't pass `(filter even?)`), then the final reducing function `add!` is never called. Thus the item is never added to the channel's buffer.
+This means that any item put into a channel will first be transformed by our transducer. And if the transducer filters out an item (e.g. doesn't pass `(filter even?)`), then the final reducing function `add!` is never called. Thus the item is never added to the channel's buffer and no takers ever see it.
 
 The pertinent code can be found in the core.async sources, [here](https://github.com/clojure/core.async/blob/ac0f1bfb40237a18dc0f03c0db5df41657cd23a6/src/main/clojure/clojure/core/async/impl/channels.clj#L287).
 
@@ -340,8 +340,8 @@ Note that you may need to keep some state for this one.
 
 # References
 
-[Understanding Transducers guide](https://gist.github.com/elben/da8864e120c373e5fcf0)
+[Source code for this post](https://gist.github.com/elben/da8864e120c373e5fcf0)
 
-[Tom Ashwroth: CSP and transducers in JavaScript](http://phuu.net/2014/08/31/csp-and-transducers.html)
+[Tom Ashworth: CSP and transducers in JavaScript](http://phuu.net/2014/08/31/csp-and-transducers.html)
 
 [Rich Hickey: Transducers are coming](http://blog.cognitect.com/blog/2014/8/6/transducers-are-coming)
