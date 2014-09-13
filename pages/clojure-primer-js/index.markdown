@@ -1,12 +1,12 @@
 ---
 layout: pages
-title: "Clojure Preliminaries"
+title: "Clojure Primer"
 h1_class: small
 ---
 
 Clojure examples compared to JavaScript counterparts.
 
-Define a var:
+Defining vars:
 
 ```clojure
 (def age 100)
@@ -17,7 +17,7 @@ Define a var:
 var age = 100;
 ```
 
-Create a map:
+Creating maps:
 
 ```clojure
 {:foo 0 :bar {:car "far"}}
@@ -53,6 +53,42 @@ Functions are values:
 // With Underscore.js
 _.map([1, 2, 3], function (n) { return n + 1; });
 // ⇒ [2 3 4]
+```
+
+Defining and using functions:
+
+```clojure
+(defn square [x] (* x x))
+
+(square 3)
+;; ⇒ 9
+```
+
+```javascript
+// JavaScript
+function square(x) { return x * x; }
+
+square(3);
+// ⇒ 9
+```
+
+Defining and using anonymous functions:
+
+```clojure
+((fn [x] (* x x)) 3)
+;; ⇒ 9
+
+;; % represents the first argument to the anonymous function.
+;; We could have also used %1 to get at the first argument.
+;; This function is the same as function above.
+(#(* % %) 3)
+;; ⇒ 9
+```
+
+```javascript
+// JavaScript
+(function (x) { return x * x; })(3);
+// ⇒ 9
 ```
 
 Clojure sequences are lazy:
