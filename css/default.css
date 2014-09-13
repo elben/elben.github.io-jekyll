@@ -358,3 +358,29 @@ ul.simple {
     width: auto;
   }
 }
+
+@media print {
+  body {
+    font-size: 9pt;
+    color: #000;
+    background: none;
+  }
+
+  a {
+    color: initial;
+    text-decoration: underline;
+  }
+
+  code {
+    /* Remove padding used for background hightlight */
+    padding: 0;
+  }
+
+  @page {
+    margin: 2cm 3.5cm 2cm 3.5cm;
+  }
+
+  .post-content-end {
+    display: none;
+  }
+}

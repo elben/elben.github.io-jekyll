@@ -40,3 +40,11 @@
 .highlight .sr { } /* Literal.String.Regex */
 .highlight .s1 { } /* Literal.String.Single */
 .highlight .ss { } /* Literal.String.Symbol */
+
+
+@media print {
+  .highlight .c { color: inherit; } /* Comment */
+  .highlight .cm { font-style: italic; color: inherit; } /* Comment.Multiline */
+  .highlight .c1 { font-style: italic; color: inherit; } /* Comment.Single */
+  .highlight .cs { font-style: italic; color: inherit; } /* Comment.Special */
+}
