@@ -14,7 +14,7 @@ And since we ignore transducers, you won't need to know what transducers are to 
 
 Also, I encourage you to type these examples into your REPL, or use [clojurescript.net](http://clojurescript.net/). The source code from this post can be found [here](https://gist.github.com/elben/da8864e120c373e5fcf0).
 
-## Reduce everything
+## Power of reduce
 
 You are probably familiar with `map` and `filter`, and know that we can combine them together, like this:
 
@@ -316,14 +316,15 @@ Using Clojure's transducer library:
     (map square)
     (map inc)))
 
-(def my-chan (chan 1 xform))
+(def my-chan (async/chan 1 xform))
 
-(put! my-chan 3)
-(take! my-chan println)
+; Waiting for an item to print...
+(async/take! my-chan println)
+
+(async/put! my-chan 3)
 ; nothing printed to screen, since 3 is not even
 
-(put! my-chan 4)
-(take! my-chan println)
+(async/put! my-chan 4)
 ; "17" printed to screen, since 4 is even and less than 10
 ```
 
