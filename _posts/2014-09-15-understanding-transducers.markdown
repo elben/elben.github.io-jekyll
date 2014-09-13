@@ -215,7 +215,7 @@ It turns out, this function *also* has the type `result, input ⟶ result`. It i
 
 ```clojure
 (reduce ((mapping inc) ((filtering even?) conj)) [] (range 10))
-; ⇒ [2 4 6 8]
+; ⇒ [2 4 6 8 10]
 ```
 
 This is a bit messy, so let's clean it up by using `comp` instead. Recall that `(comp a b c d)` returns the function
@@ -233,7 +233,7 @@ Here's the cleaned up version, using `comp`:
     (filtering even?)))
 
 (reduce (xform conj) [] (range 10))
-; ⇒ [2 4 6 8]
+; ⇒ [2 4 6 8 10]
 ```
 
 And what about something more complex:
@@ -285,19 +285,19 @@ Say we invoke this composed function by passing in some reducing function, perha
 
 This means that when we give a reducing function to `xform`, like `(xform conj)`, we get back a function that will apply the left-most reducing function first, then down the stack until the last reducing function, `conj`, is applied to the current result and input.
 
-Imagine this transducer is being used in some reduce function, and we have so far collected in our results the vector `[5 17]`. Say the current input in question is `12`. Since `12` is even, it will pass the first filter. This first filter will then call its reducing function, passing in `[5 17]` and `12`. In this case, the reducing function is the “rest” of the transformation, which is the second filter `#(< % 10)`. Since `12` fails the second filter, the third reducing function is *not* called, and the result-so-far `[5 17]` is returned.
+Imagine this transducer is being used in some reduce function, and we have so far collected in our results the vector `[1 5 17]`. Say the current input in question is `12`. Since `12` is even, it will pass the first filter. This first filter will then call its reducing function, passing in `[1 5 17]` and `12`. In this case, the reducing function is the “rest” of the transformation, which is the second filter `#(< % 10)`. Since `12` fails the second filter, the third reducing function is *not* called, and the result-so-far `[1 5 17]` is returned.
 
-But if the input in question is `6`, it would pass both filters and arrive at the mapping transforms, which will transform `6` to `37`. We then pass this input to the final reducing function, `conj`, which will join `[5 17]` with the new value `37`.
+But if the input in question is `6`, it would pass both filters and arrive at the mapping transforms, which will transform `6` to `37`. We then pass this input to the final reducing function, `conj`, which will join `[1 5 17]` with the new value `37`.
 
 ```clojure
-((xform conj) [5 17] 12)
-; ⇒ [5 17]
+((xform conj) [1 5 17] 12)
+; ⇒ [1 5 17]
 
-((xform conj) [5 17] 6)
-; ⇒ [5 17 37]
+((xform conj) [1 5 17] 6)
+; ⇒ [1 5 17 37]
 
 (reduce (xform conj) [] (range 10))
-; ⇒ [5 17 37 65]
+; ⇒ [1 5 17 37 65]
 ```
 
 Being able to compose transducers is important. We see that it's quite simple to do, and that ordinary functions power all of it.
@@ -350,7 +350,7 @@ We've come a long ways. We started with regular `map` and `filter` and observed 
 
 By building, analyzing and using transducers, I hope that you gained a better understanding of how they work. They are, after all, just functions.
 
-# Problems sets
+# Problem sets
 
 If you're interested in learning more, I encourage you to tackle the problems below. [Solutions can be found here](https://gist.github.com/elben/da8864e120c373e5fcf0).
 
