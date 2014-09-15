@@ -110,7 +110,7 @@ The expression above is equivalent (ignoring vectors versus lists) to the expres
 
 We see that with higher-order functions, we are able to define `map` and `filter` in terms of `reduce`.
 
-Both versions, however, required intermediate vectors—one for map and one for filter. One important property of transducers is that they should employ only one collection irregardless of the number of transformations. How can we accomplish that?
+Both versions, however, required intermediate vectors—one for map and one for filter. One important property of transducers is that they should employ only one collection regardless of the number of transformations. How can we accomplish that?
 
 ## Another step in abstraction
 
