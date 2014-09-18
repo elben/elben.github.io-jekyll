@@ -351,7 +351,7 @@ By building, analyzing and using transducers, I hope that you gained a better un
 
 # Problem sets
 
-If you're interested in learning more, I encourage you to tackle the problems below. [Solutions can be found here](https://gist.github.com/elben/da8864e120c373e5fcf0).
+If you're interested in learning more, I encourage you to tackle the problems below. [Solutions can be found here](https://gist.github.com/elben/da8864e120c373e5fcf0#file-understanding-transducers-clj-L204).
 
 **Write a `transduce` helper function**
 
