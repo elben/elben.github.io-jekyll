@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 0.0-2277
+// Compiled by ClojureScript 0.0-2280
 goog.provide('planjure.history');
 goog.require('cljs.core');
 goog.require('om.core');

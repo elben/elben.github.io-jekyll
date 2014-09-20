@@ -12,6 +12,7 @@
          :visited []
          :algo :dijkstra
          :last-run-time 0
+         :last-cost 0 ;; Cost of last plan
          :canvas { :width 400 :height 400 }
 
          :world-size :small
@@ -44,17 +45,16 @@
            }
 
          :mouse-drawing false
+         :mouse-moving-setup { :start false :finish false }
          :mouse-pos [0 0]
         }))
 
 (def plan-chan (chan))
 
 (defn update-world-state!
-  "Update world state given app-state cursor or atom. Re-plan if app-state
-  requires it."
+  "Update world state given app-state cursor or atom."
   [app-state new-world]
   (if (om/cursor? app-state)
     (om/update! app-state :world new-world)
-    (swap! app-state assoc :world new-world))
-  (when (:replan @app-state) (put! plan-chan "plan!")))
+    (swap! app-state assoc :world new-world)))
 

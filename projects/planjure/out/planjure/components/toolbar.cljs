@@ -9,7 +9,9 @@
             [planjure.history :as history]))
 
 (def algorithms {:dijkstra {:name "Dijkstra" :fn (utils/time-f plan/dijkstra)}
-                 :dfs      {:name "Depth-first" :fn (utils/time-f plan/dfs)}})
+                 :astar    {:name "A*" :fn (utils/time-f plan/astar)}
+                 :dfs      {:name "Depth-first" :fn (utils/time-f plan/dfs)}
+                 })
 
 (defn checkbox-component [cursor owner]
   (reify
@@ -110,7 +112,20 @@
         (dom/div
           #js {:className :running-time}
           (dom/div nil (str (/ (cursor :last-run-time) 1000) " seconds"))
+          (dom/div nil (str (cursor :last-cost) " Cost"))
           (dom/div nil (name (cursor :brush))))))))
+
+;; A component that will force a replan whenever its cursor changes. Not sure if
+;; this is the best way to do this.
+(defn replan-component [cursor owner]
+  (reify
+    om/IWillUpdate
+    (will-update [_ next-props {:keys [plan-chan] :as next-state}]
+      (when (:replan cursor) (put! plan-chan "plan!")))
+
+    om/IRender
+    (render [_]
+      (dom/span #js {} nil))))
 
 (defn toolbar-component [app-state owner]
   (reify
@@ -134,6 +149,7 @@
                   ;; React.js render/render-state cycles.
                   (om/update! app-state :last-run-time (result :time))
                   (om/update! app-state :visited (:visited (result :return)))
+                  (om/update! app-state :last-cost (:cost (result :return)))
                   (om/update! app-state :path (:path (result :return)))))
               (when (= ch configuration-chan)
                 (case (:kind v)
@@ -184,7 +200,6 @@
             (om/build size-component
               {:world-size (:world-size app-state) :world-size-options (:world-size-options app-state)}
               {:init-state {:configuration-chan configuration-chan}})))
-
         (dom/div
           nil
           (dom/div #js {:className "section-title"} "Editor")
@@ -195,7 +210,6 @@
                        :brush-size (:brush-size app-state)
                        :brush-size-options (:brush-size-options app-state)}
                       {:init-state {:configuration-chan configuration-chan}})))
-
         (dom/div
           nil
           (dom/div #js {:className "section-title"} "History")
@@ -259,5 +273,10 @@
           (dom/div #js {:className "section-title"} "Statistics")
           (dom/div #js {:className "section-wrapper"}
             (om/build statistics-component
-                      {:last-run-time (:last-run-time app-state)
-                       :brush (:brush app-state)})))))))
+                      {:last-cost (:last-cost app-state)
+                       :last-run-time (:last-run-time app-state)
+                       :brush (:brush app-state)})))
+        (om/build replan-component
+                  (select-keys app-state [:world :setup :replan])
+                  {:init-state {:plan-chan (om/get-state owner :plan-chan)}})))))
+

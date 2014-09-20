@@ -1,4 +1,4 @@
-// Compiled by ClojureScript 0.0-2277
+// Compiled by ClojureScript 0.0-2280
 goog.provide('planjure.demo');
 goog.require('cljs.core');
 goog.require('planjure.components.canvas');
