@@ -9,7 +9,7 @@ What are transducers? Using transducers is easy enough—but how do they work un
 
 This article explores transducers by ignoring transducers. Instead we will examine two ordinary functions, `map` and `filter`. We'll play with them and scrutinize them. And we'll marvel at the power of higher-order functions as we apply abstractions. And perhaps, if we're lucky, we'll bump into transducers along the way.
 
-And since we ignore transducers, you won't need to know what transducers are to follow along. If you don't know Clojure or a Lisp, [this quick primer](/pages/clojure-primer-js/) may help.
+And since we ignore transducers, you won't need to know what transducers are to follow along. If you don't know Clojure or a Lisp, [this quick primer](/p/clojure-primer-js/) may help.
 
 Lastly, I encourage you to type these examples into your REPL, or use [clojurescript.net](http://clojurescript.net/). The source code from this post can be found [here](https://gist.github.com/elben/da8864e120c373e5fcf0).
 
