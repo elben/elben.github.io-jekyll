@@ -235,7 +235,7 @@ What a refreshing way of thinking!
 
 Other than a marvelous elegance, you also get features like snapshots for free. The famous example is this: say we save a snapshot of our states over time, $[s\_0, s\_1, s\_2, …]$. Then choose any state, pass that into your program, and *bam* your UI is rendered as expected.
 
-This makes [time travel](http://swannodette.github.io/2013/12/31/time-travel/) (e.g. undo/redo) easy. [Planjure](http://elbenshira.com/projects/planjure/), Om [TodoMVC](http://swannodette.github.io/todomvc/labs/architecture-examples/om-undo/index.html) and [Goya](http://jackschaedler.github.io/goya/) are three example apps that implement undo/redo, all with just a few lines of code.
+This makes [time travel](http://swannodette.github.io/2013/12/31/time-travel/) (e.g. undo/redo) easy. [Planjure](http://elbenshira.com/p/planjure/), Om [TodoMVC](http://swannodette.github.io/todomvc/labs/architecture-examples/om-undo/index.html) and [Goya](http://jackschaedler.github.io/goya/) are three example apps that implement undo/redo, all with just a few lines of code.
 
 With Om, the complexity of state management, writing error-prone code to make sure that component A knows that component B knows that component C got a mouse click and is waiting for an AJAX response—all of that goes away. You find yourself astonished, really, at how simple everything can be.
 
