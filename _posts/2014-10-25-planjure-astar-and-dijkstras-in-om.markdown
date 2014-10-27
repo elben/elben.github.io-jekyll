@@ -5,7 +5,7 @@ categories: blog
 tags: clojure
 ---
 
-I wrote [Planjure](/p/planjure/) to learn ClojureScript and Om. It's a fun little program. You paint islands on a canvas and run path-planning algorithms to find the optimal path for your ship to to traverse from start to finish. Sailing across blue ocean is faster than hiking through green islands. The three algorithms implemented are Dijkstra’s, A\* and depth-first.
+I wrote [Planjure](/p/planjure/) to learn ClojureScript and Om. It's a fun little program. You paint islands on a canvas and run path-planning algorithms to find the optimal path for your ship to traverse from start to finish. Sailing across blue ocean is faster than hiking through green islands. The three algorithms implemented are Dijkstra’s, A\* and depth-first.
 
 My favorite feature is Visited mode. When you enable Visited, you'll be able to see the nodes that the algorithm had to visit in its search for the optimal path. A node is visited only if the algorithm thinks that an optimal path may use the node. An unvisited node implies that the algorithm has found a faster path that does not require that node.
 
