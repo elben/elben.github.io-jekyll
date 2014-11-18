@@ -40,7 +40,7 @@
 
 body {
   color: #151311; /* Dark grey with a little of red saturation */
-  background: #f9f5f1;
+  /* background: #f9f5f1; */
   font-family: 'Charter', Georgia, sans-serif;
 
   /* Our base font of 18px. Line-heights, margins, and paddings calculated to
@@ -61,13 +61,13 @@ p {
 a {
   /* color: #ff3366; */ /* red persimmon */
   /* color: #003beb; */ /* spring blue */
-  color: #53912a; /* awesome green */
-  text-decoration: none;
+  /* color: #53912a; */ /* awesome green */
+  color: #151311; /* Same as body */
+  text-decoration: underline;
 }
 
 a:hover {
   text-decoration: underline;
-  /* color: #ff3366; /1* red persimmon *1/ */
 }
 
 hr {
@@ -304,14 +304,14 @@ ul.simple {
 
 .meta {
   font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
-  /* Grey with reddish saturation */
-  color: #b3a9a6;
+  /* color: #b3a9a6; */ /* Grey with reddish saturation */
+  color: #666260; /* Darker grey with reddish saturation */
 }
 
 .article-metadata {
   font-family: "Avenir", "Gill Sans", "Helvetica Neue", helvetica, sans-serif;
-  /* Grey with reddish saturation */
-  color: #b3a9a6;
+  /* color: #b3a9a6; */ /* Grey with reddish saturation */
+  color: #666260; /* Darker grey with reddish saturation */
   font-size: 0.75em;
   line-height: 2em;
 }
