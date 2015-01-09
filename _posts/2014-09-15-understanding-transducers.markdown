@@ -2,7 +2,7 @@
 layout: post
 title:  "Understanding Transducers"
 categories: blog
-tags: clojure
+tags: clojure, favorite
 ---
 
 What are transducers? Using transducers is easy enough—but how do they work underneath the hood?
